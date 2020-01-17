@@ -3,12 +3,27 @@
   overflow: visible;
 }
 
+.App div.frame-elements {
+  margin: auto;
+}
+
 .node {
   border: 2px solid black;
   padding: 10px;
   display: flex;
   justify-content: space-evenly;
-  position: static !important;
+}
+
+.node p {
+  margin: 5px 0px;
+}
+
+.node p.children {
+  font-size: 10px;
+}
+
+.primary {
+  border: 2px solid red;
 }
 
 .node div {
