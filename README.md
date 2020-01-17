@@ -1,6 +1,6 @@
 ## Semiotic Force
 
-This is an example project for creating a force graph with the [https://github.com/nteract/semiotic](semiotic) library
+This is an example project for creating a force graph with the [semiotic](https://github.com/nteract/semiotic) library
 
 The graph will always start with a single node, and as nodes are added/removed, the graph is redrawn every time
 
