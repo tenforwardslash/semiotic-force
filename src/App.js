@@ -10,14 +10,16 @@ class App extends Component {
         super(props);
         this.state = {
             nodes: null,
-            nodeNum: 1,
+            nodeNum: 2,
             chartOpts: null
         };
     }
 
     componentDidMount() {
         //initialize graph with single parent node
-        this.createAndSetOpts({key: 0, name: "node", height: 100, width: 150}, NODE_AREA);
+        this.createAndSetOpts({key: 0, name: "node", height: 100, width: 150, children: [
+            {key: 1, name: "node", height: 100, width: 150}
+            ]});
     }
 
     addNode = (nodeId) => {
@@ -97,27 +99,29 @@ class App extends Component {
         await this.setState({ nodes: updatedNodes });
 
         let networkChart = {
+            // size: [700, 00],
             size: this.calculateSizeFromArea(this.state.nodeNum * NODE_AREA, window.outerWidth/window.outerHeight),
             nodeIDAccessor: "key",
             networkType: {
-                type: "force",
-                iterations: 500,
+                type: "tree",
                 zoom: "stretch",
-                forceManyBody:  (d) => {
-                    return -2 * d.height;
-                },
+                // iterations: 500,
+                // forceManyBody:  (d) => {
+                //     return -2 * d.height;
+                // },
                 distanceMax: 200,
                 edgeStrength: 10
             },
             edgeStyle: (d) => {
                 return {stroke: 'black', strokeWidth: 1.5}
             },
-            nodeSizeAccessor: (d) => { return 30 },
+            margin: 10,
+            nodeSizeAccessor: (d) => { return 100 },
             customNodeIcon: (node) => {
                 return (
                     <foreignObject
                         key={node.d.key}
-                        transform={`translate(${node.d.x - 50}, ${node.d.y})`}
+                        transform={`translate(${node.d.x - 50}, ${node.d.key === 0 ? node.d.y : node.d.y})`}
                         // firefox/safari both need explicit foreign object height/width to work
                         height={node.d.height}
                         width={node.d.width}>
@@ -138,11 +142,11 @@ class App extends Component {
 
         // if only one node exists with no children, graph will not render
         // have to set nodes to an array of one, then it will render properly
-        if (!this.state.nodes.children || this.state.nodes.children.length === 0) {
-            networkChart.nodes = [this.state.nodes];
-        } else {
+        // if (!this.state.nodes.children || this.state.nodes.children.length === 0) {
+        //     networkChart.nodes = [this.state.nodes];
+        // } else {
             networkChart.edges = this.state.nodes;
-        }
+        // }
 
         this.setState({
             chartOpts: networkChart
